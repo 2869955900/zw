@@ -131,8 +131,8 @@ if st.button("Predict"):
     ])
     import matplotlib.pyplot as plt
     # 设置支持中文的字体
-    plt.rcParams['font.sans-serif'] = ['SimHei']  # 或者使用其他字体如'Microsoft YaHei'
-    plt.rcParams['axes.unicode_minus'] = False  # 处理负号显示问题
+    plt.rcParams['font.sans-serif'] = 'SimHei'
+    plt.rcParams['axes.unicode_minus'] = False
     # 创建SHAP力图，确保中文显示
     shap.force_plot(
         base_value, 
