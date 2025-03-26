@@ -91,7 +91,7 @@ if st.button("Predict"):
     shap_values = explainer.shap_values(features)
 
     # 获取指定样本的SHAP值
-    base_value = explainer.expected_value  # 基础值，模型的平均输出
+    base_value = explainer.expected_value[0]  # 基础值，模型的平均输出
     shap_values_sample = shap_values[0]  # 获取第一个样本的SHAP值
 
     # 定义特征名称和其对应的值
