@@ -131,18 +131,28 @@ if st.button("预测"):
         f"心理弹性={feature_values[30]}",
         f"家庭支持={feature_values[31]}"
     ])
-
+    st.write("### SHAP 力图")
     # 创建SHAP力图，确保中文显示
-    shap.force_plot(
+    force_plot = shap.force_plot(
         base_value, 
         shap_values_sample, 
         features_with_values,  
         matplotlib=True,  # 使用Matplotlib显示
         show=False  # 不显示默认的力图窗口
     )
+    st.pyplot(force_plot)
 
-    # 设置力图的标题，确保中文显示
-    plt.gca().set_title("SHAP 力图", fontsize=16, fontname=font_prop.get_name())  # 设置标题为中文
+    # 保存SHAP力图为HTML文件并在Streamlit中显示
+    # shap.save_html('shap_plot.html', force_plot)
+    # st.components.v1.html(open('shap_plot.html').read(), height=600)
 
-    # 展示SHAP力图
-    st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
+   # 展示蜂群图
+    st.write("### 蜂群图")
+    image_url = "https://raw.githubusercontent.com/wuyuze3387/-03.25/main/蜂群图.png"  # 确保这是正确的图片URL
+    try:
+        response = requests.get(image_url)
+        response.raise_for_status()  # 确保请求成功
+        img = Image.open(BytesIO(response.content))
+        st.image(img, caption='蜂群图', use_container_width=True)  # 使用 use_container_width 参数
+    except requests.exceptions.RequestException as e:
+        st.error("无法加载图片，请检查链接是否正确。错误信息：" + str(e))
