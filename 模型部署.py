@@ -9,8 +9,8 @@ from io import BytesIO
 import requests
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = 'SimHei'
-plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体字体显示中文
+plt.rcParams['axes.unicode_minus'] = False  # 处理负号问题
 
 # 加载模型
 model_path = "RandomForestRegressor.pkl"
@@ -81,10 +81,10 @@ for feature, properties in feature_ranges.items():
 features = np.array([feature_values])
 
 # 预测与 SHAP 可视化
-if st.button("Predict"):
+if st.button("预测"):
     # 模型预测
     predicted_value = model.predict(features)[0]
-    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}")
+    st.write(f"预测的分娩心理创伤得分: {predicted_value:.2f}")
 
     # SHAP 解释器
     explainer = shap.TreeExplainer(model)
@@ -129,10 +129,7 @@ if st.button("Predict"):
         f"心理弹性={feature_values[30]}",
         f"家庭支持={feature_values[31]}"
     ])
-    import matplotlib.pyplot as plt
-    # 设置支持中文的字体
-    plt.rcParams['font.sans-serif'] = ['SimHei']  
-    plt.rcParams['axes.unicode_minus'] = False 
+
     # 创建SHAP力图，确保中文显示
     shap.force_plot(
         base_value, 
@@ -141,6 +138,9 @@ if st.button("Predict"):
         matplotlib=True,  # 使用Matplotlib显示
         show=False  # 不显示默认的力图窗口
     )
+
+    # 设置力图的标题，确保中文显示
+    plt.gca().set_title("SHAP 力图", fontsize=16, fontname='SimHei')  # 设置标题为中文
 
     # 展示SHAP力图
     st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
