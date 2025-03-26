@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 25 14:27:00 2025
-
-@author: 86185
-"""
-
 import streamlit as st
 import joblib
 import numpy as np
-import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-import requests
 from PIL import Image
 from io import BytesIO
+import requests
 
 # 设置matplotlib支持中文和负号
 plt.rcParams['font.sans-serif'] = 'SimHei'
@@ -97,21 +90,58 @@ if st.button("Predict"):
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(features)
 
-    # SHAP 力图
-    st.write("### SHAP 力图")
-    force_plot = shap.force_plot(
-        explainer.expected_value,
-        shap_values[0, :],
-        features[0, :],
-        feature_names=list(feature_ranges.keys()),
-        matplotlib=True,
-        show=False
-    )
-    st.pyplot(force_plot)
+    # 获取指定样本的SHAP值
+    base_value = explainer.expected_value  # 基础值，模型的平均输出
+    shap_values_sample = shap_values[0]  # 获取第一个样本的SHAP值
 
-    # 保存SHAP力图为HTML文件并在Streamlit中显示
-    # shap.save_html('shap_plot.html', force_plot)
-    # st.components.v1.html(open('shap_plot.html').read(), height=600)
+    # 定义特征名称和其对应的值
+    features_with_values = np.array([
+        f"年龄={feature_values[0]}",
+        f"体重={feature_values[1]}",
+        f"居住地={feature_values[2]}",
+        f"婚姻状况={feature_values[3]}",
+        f"就业情况={feature_values[4]}",
+        f"学历={feature_values[5]}",
+        f"医疗费用支付方式={feature_values[6]}",
+        f"怀孕次数={feature_values[7]}",
+        f"分娩次数={feature_values[8]}",
+        f"分娩方式={feature_values[9]}",
+        f"不良孕产史={feature_values[10]}",
+        f"终止妊娠经历={feature_values[11]}",
+        f"妊娠周数={feature_values[12]}",
+        f"妊娠合并症={feature_values[13]}",
+        f"妊娠并发症={feature_values[14]}",
+        f"喂养方式={feature_values[15]}",
+        f"新生儿是否有出生缺陷或疾病={feature_values[16]}",
+        f"家庭人均月收入={feature_values[17]}",
+        f"使用无痛分娩技术={feature_values[18]}",
+        f"产时疼痛={feature_values[19]}",
+        f"产后疼痛={feature_values[20]}",
+        f"产后照顾婴儿方式={feature_values[21]}",
+        f"近1月睡眠质量={feature_values[22]}",
+        f"近1月夜间睡眠时长={feature_values[23]}",
+        f"近1月困倦程度={feature_values[24]}",
+        f"孕期体育活动等级={feature_values[25]}",
+        f"抑郁={feature_values[26]}",
+        f"焦虑={feature_values[27]}",
+        f"侵入性反刍性沉思={feature_values[28]}",
+        f"目的性反刍性沉思={feature_values[29]}",
+        f"心理弹性={feature_values[30]}",
+        f"家庭支持={feature_values[31]}"
+    ])
+
+    # 创建SHAP力图，确保中文显示
+    shap.force_plot(
+        base_value, 
+        shap_values_sample, 
+        features_with_values, 
+        feature_names=list(feature_ranges.keys()), 
+        matplotlib=True,  # 使用Matplotlib显示
+        show=False  # 不显示默认的力图窗口
+    )
+
+    # 展示SHAP力图
+    st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
 
     # 展示蜂群图
     st.write("### 蜂群图")
