@@ -6,15 +6,14 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
 # 设置字体路径
-font_path = "msyhl.ttc"  # 将路径替换为字体文件的实际路径
+font_path = "msyhl.ttc"  # 使用上传的字体文件路径
 
-# 加载 TTC 文件中的第一个字体
-font_prop = font_manager.FontProperties(fname=font_path, subset="msyh")  # "msyh" 是微软雅黑字体名称，你可以选择不同的字体
+# 获取TTC文件中的所有字体
+prop = font_manager.FontProperties(fname=font_path)
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = [font_prop.get_name()]  # 使用指定字体显示中文
+plt.rcParams['font.sans-serif'] = [prop.get_name()]  # 使用指定字体显示中文
 plt.rcParams['axes.unicode_minus'] = False  # 处理负号问题
-
 # 加载模型
 model_path = "RandomForestRegressor.pkl"
 model = joblib.load(model_path)
