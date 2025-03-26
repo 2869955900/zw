@@ -1,19 +1,17 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 import joblib
 import numpy as np
 import shap
 import matplotlib.pyplot as plt
-from matplotlib import font_manager
-
-# 设置字体路径
-font_path = "msyhl.ttc"  # 使用上传的字体文件路径
-
-# 获取TTC文件中的所有字体
-prop = font_manager.FontProperties(fname=font_path)
+from PIL import Image
+from io import BytesIO
+import requests
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = [prop.get_name()]  # 使用指定字体显示中文
-plt.rcParams['axes.unicode_minus'] = False  # 处理负号问题
+plt.rcParams['font.sans-serif'] = 'SimHei'
+plt.rcParams['axes.unicode_minus'] = False
+
 # 加载模型
 model_path = "RandomForestRegressor.pkl"
 model = joblib.load(model_path)
@@ -83,10 +81,10 @@ for feature, properties in feature_ranges.items():
 features = np.array([feature_values])
 
 # 预测与 SHAP 可视化
-if st.button("预测"):
+if st.button("Predict"):
     # 模型预测
     predicted_value = model.predict(features)[0]
-    st.write(f"预测的分娩心理创伤得分: {predicted_value:.2f}")
+    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}")
 
     # SHAP 解释器
     explainer = shap.TreeExplainer(model)
@@ -131,22 +129,21 @@ if st.button("预测"):
         f"心理弹性={feature_values[30]}",
         f"家庭支持={feature_values[31]}"
     ])
-    st.write("### SHAP 力图")
+
     # 创建SHAP力图，确保中文显示
-    force_plot = shap.force_plot(
+    shap.force_plot(
         base_value, 
         shap_values_sample, 
-        features_with_values,  
+        features_with_values, 
+        feature_names=list(feature_ranges.keys()), 
         matplotlib=True,  # 使用Matplotlib显示
         show=False  # 不显示默认的力图窗口
     )
-    st.pyplot(force_plot)
 
-    # 保存SHAP力图为HTML文件并在Streamlit中显示
-    # shap.save_html('shap_plot.html', force_plot)
-    # st.components.v1.html(open('shap_plot.html').read(), height=600)
+    # 展示SHAP力图
+    st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
 
-   # 展示蜂群图
+    # 展示蜂群图
     st.write("### 蜂群图")
     image_url = "https://raw.githubusercontent.com/wuyuze3387/-03.25/main/蜂群图.png"  # 确保这是正确的图片URL
     try:
