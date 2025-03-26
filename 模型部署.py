@@ -129,7 +129,10 @@ if st.button("Predict"):
         f"心理弹性={feature_values[30]}",
         f"家庭支持={feature_values[31]}"
     ])
-
+    import matplotlib.pyplot as plt
+    # 设置支持中文的字体
+    plt.rcParams['font.sans-serif'] = ['SimHei']  
+    plt.rcParams['axes.unicode_minus'] = False 
     # 创建SHAP力图，确保中文显示
     shap.force_plot(
         base_value, 
