@@ -134,8 +134,7 @@ if st.button("Predict"):
     shap.force_plot(
         base_value, 
         shap_values_sample, 
-        features_with_values, 
-        feature_names=list(feature_ranges.keys()), 
+        features_with_values,  
         matplotlib=True,  # 使用Matplotlib显示
         show=False  # 不显示默认的力图窗口
     )
