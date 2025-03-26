@@ -1,15 +1,18 @@
-# -*- coding: utf-8 -*-
 import streamlit as st
 import joblib
 import numpy as np
 import shap
 import matplotlib.pyplot as plt
-from PIL import Image
-from io import BytesIO
-import requests
+from matplotlib import font_manager
+
+# 设置字体路径
+font_path = "msyhl.ttc"  # 将路径替换为字体文件的实际路径
+
+# 加载 TTC 文件中的第一个字体
+font_prop = font_manager.FontProperties(fname=font_path, subset="msyh")  # "msyh" 是微软雅黑字体名称，你可以选择不同的字体
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用黑体字体显示中文
+plt.rcParams['font.sans-serif'] = [font_prop.get_name()]  # 使用指定字体显示中文
 plt.rcParams['axes.unicode_minus'] = False  # 处理负号问题
 
 # 加载模型
@@ -140,18 +143,7 @@ if st.button("预测"):
     )
 
     # 设置力图的标题，确保中文显示
-    plt.gca().set_title("SHAP 力图", fontsize=16, fontname='SimHei')  # 设置标题为中文
+    plt.gca().set_title("SHAP 力图", fontsize=16, fontname=font_prop.get_name())  # 设置标题为中文
 
     # 展示SHAP力图
     st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
-
-    # 展示蜂群图
-    st.write("### 蜂群图")
-    image_url = "https://raw.githubusercontent.com/wuyuze3387/-03.25/main/蜂群图.png"  # 确保这是正确的图片URL
-    try:
-        response = requests.get(image_url)
-        response.raise_for_status()  # 确保请求成功
-        img = Image.open(BytesIO(response.content))
-        st.image(img, caption='蜂群图', use_container_width=True)  # 使用 use_container_width 参数
-    except requests.exceptions.RequestException as e:
-        st.error("无法加载图片，请检查链接是否正确。错误信息：" + str(e))
