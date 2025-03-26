@@ -139,8 +139,9 @@ if st.button("Predict"):
         show=False  # 不显示默认的力图窗口
     )
 
-    # 展示SHAP力图
-    st.pyplot(bbox_inches='tight')  # 使用Streamlit的pyplot展示图像
+    # 保存SHAP力图并展示
+    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
+    st.image("shap_force_plot.png")
 
     # 展示蜂群图
     st.write("### 蜂群图")
