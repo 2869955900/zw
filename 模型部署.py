@@ -35,7 +35,7 @@ feature_ranges = {
     "分娩方式": {"type": "categorical", "options": [1, 2, 3]},
     "不良孕产史": {"type": "categorical", "options": [1, 2]},
     "终止妊娠经历": {"type": "categorical", "options": [1, 2]},
-    "妊娠周数": {"type": "numerical", "min": 29, "max": 44, "default": 29},
+    "妊娠周数RCZS": {"type": "numerical", "min": 29, "max": 44, "default": 29},
     "妊娠合并症": {"type": "categorical", "options": [1, 2]},
     "妊娠并发症": {"type": "categorical", "options": [1, 2]},
     "喂养方式": {"type": "categorical", "options": [1, 2, 3]},
